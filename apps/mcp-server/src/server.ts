@@ -1,4 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
 import { statusTool } from "@kreynima/agent-tools";
 export function createServer() {
   const server = new McpServer({ name: "kreynima", version: "0.0.0" });
@@ -6,7 +7,7 @@ export function createServer() {
     statusTool.name,
     {
       description: statusTool.description,
-      inputSchema: {},
+      inputSchema: z.object({}).strict(),
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,

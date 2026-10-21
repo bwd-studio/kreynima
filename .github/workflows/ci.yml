@@ -2,11 +2,14 @@ name: Foundation checks
 on:
   push:
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   javascript:
+    timeout-minutes: 45
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
@@ -18,9 +21,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm audit --omit=dev --audit-level=high
+      - run: npm audit --audit-level=high
   native:
+    timeout-minutes: 45
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
@@ -37,11 +42,12 @@ jobs:
       - run: cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml --check
       - run: cargo check --locked --manifest-path apps/desktop/src-tauri/Cargo.toml
       - run: cargo test --locked --manifest-path apps/desktop/src-tauri/Cargo.toml
-      - run: npm run tauri -w @kreynima/desktop -- build --no-bundle
-  rust-licenses:
+      - run: npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked
+  rust-dependencies:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo install cargo-deny --locked
-      - run: cargo deny --manifest-path apps/desktop/src-tauri/Cargo.toml check licenses bans sources
+      - run: cargo install cargo-deny --version 0.20.2 --locked
+      - run: cargo deny --manifest-path apps/desktop/src-tauri/Cargo.toml check advisories licenses bans sources
