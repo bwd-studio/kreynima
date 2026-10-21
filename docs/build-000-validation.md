@@ -65,6 +65,31 @@ RUSTSEC-2024-0370 concerns unmaintained `proc-macro-error` 1.0.4 through Tauri's
 
 GPL license/source/ban metadata checks pass, but complete corresponding-source and notice review is still required before binary distribution. LICENSE, TRADEMARKS.md, and BRAND_ASSETS_LICENSE.md remain unchanged in this follow-up. Commercial GPL forks remain permitted. No trademark registration, clearance, or completed legal review is asserted.
 
+## Advisory follow-up and CI for `16aa2d7`
+
+The [complete advisory investigation](dependencies/RUSTSEC-2024-0370.md) records both introducing crates (`glib-macros` and `gtk3-macros`), registry constraints, supported upgrade checks, target scope, actual maintenance risk, and recommended upstream resolution. `cargo update --dry-run` proposed zero compatible updates and did not change Cargo.lock. Newer GTK 0.19 / GLib 0.22 macro stacks remove the affected dependency but do not satisfy the current Tauri/Wry GTK `^0.18` requirements. The `proc-macro-error2` fork is archived; recently published `manyhow` and `proc-macro2-diagnostics` are upstream migration candidates, not drop-in replacements for the existing consumers. No supported dependency change was identified to apply safely.
+
+Local inverse-tree checks confirm `proc-macro-error` 1.0.4 is present in the all-target Linux/BSD toolkit graph and absent from the resolved Windows x64, macOS Apple Silicon, and macOS Intel target trees. This is dependency resolution evidence, not compilation or launch evidence for untested architectures. The advisory is informational/unmaintained with no patched versions; it does not identify a specific exploitable bug. Build-host maintenance/supply-chain risk remains, so the all-target advisory check is retained and failing. No patch, advisory ignore, target-filter suppression, manifest change, or lockfile update was made.
+
+CI on the requested exact commit `16aa2d75ba09440852296eab723d0dcedaf748a0`:
+
+| Job                | Push run [39534952582](https://github.com/bwd-studio/kreynima/actions/runs/39534952582)                 | PR run [39534957672](https://github.com/bwd-studio/kreynima/actions/runs/39534957672) |
+| ------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| JavaScript Windows | Pass ([119009339371](https://github.com/bwd-studio/kreynima/actions/runs/39534952582/job/119009339371)) | Pass (119009355351)                                                                   |
+| JavaScript macOS   | Pass (119009339514)                                                                                     | Pass (119009355433)                                                                   |
+| JavaScript Linux   | Pass (119009339604)                                                                                     | Pass (119009355460)                                                                   |
+| Native macOS       | Pass ([119009339584](https://github.com/bwd-studio/kreynima/actions/runs/39534952582/job/119009339584)) | Pass (119009355245)                                                                   |
+| Native Windows     | Pass ([119009339976](https://github.com/bwd-studio/kreynima/actions/runs/39534952582/job/119009339976)) | Pass (119009355434)                                                                   |
+| Rust dependencies  | Fail: RUSTSEC-2024-0370 (119009339497)                                                                  | Fail: same advisory (119009355422)                                                    |
+
+Both push and PR runs completed and confirm all five platform jobs passed on `16aa2d7`; both full workflows fail on the Rust maintenance advisory. Native logs confirm Windows Server 2025 x64 / `x86_64-pc-windows-msvc` and macOS Apple Silicon / `aarch64-apple-darwin`, with built executable paths. Each native test harness ran zero Rust tests; substantive status/MCP tests are the two JavaScript tests. JavaScript jobs include type checking, lint/format, tests, builds, license checks, and npm audit. The final evidence commit after `16aa2d7` is documentation only; its new runs are separate and must not be assumed complete.
+
+Rechecked locally for this documentation follow-up: `npm run check` passed, inverse target trees and registry/update checks completed, and `cargo deny ... check advisories licenses bans sources` failed only on the advisory while the remaining categories passed. No Rust/application code changed, so target native jobs above are the relevant compiled-source evidence; Linux native compilation remains blocked by missing system prerequisites as previously recorded.
+
+A [short native smoke-test checklist](native-smoke-test.md) now supplies Windows PowerShell and macOS Terminal commands: launch, verify the development window, inspect startup errors, close, and reopen; repeat against the built executable without Vite. Both manual OS results remain explicitly **Not run**. No GUI launch was observed by this agent.
+
+The draft is ready for maintainer review of the foundation and documented dependency disposition. BUILD 000 acceptance remains incomplete and the PR must stay draft: resolve/review the advisory explicitly and obtain the recorded Windows/macOS native launch evidence. No merge or BUILD 001 work was performed.
+
 ## Acceptance gates
 
 | BUILD 000 criterion                                 | Assessment                                                                                                                 |
