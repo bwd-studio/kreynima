@@ -1,0 +1,10 @@
+   Compiling tauri v2.12.4
+   Compiling tauri-macros v2.7.3
+   Compiling kreynima-desktop v0.0.0 (/workspace/kreynima/apps/desktop/src-tauri)
+    Finished `release` profile [optimized] target(s) in 11.83s
+     Running unittests src/main.rs (apps/desktop/src-tauri/target/release/deps/kreynima_desktop-d0cf76a2da93ccff)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

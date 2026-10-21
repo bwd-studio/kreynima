@@ -6,6 +6,8 @@
   "type": "module",
   "exports": "./src/index.ts",
   "dependencies": {
-    "@kreynima/project-format": "*"
+    "@kreynima/project-format": "*",
+    "@kreynima/drawing-core": "*",
+    "zod": "^3.25.0"
   }
 }

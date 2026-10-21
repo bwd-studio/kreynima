@@ -79,13 +79,24 @@ function block(input: GateInput, reason?: RegExp) {
   if (reason) assert.match(decision.reason, reason);
 }
 
-test("activation has only an explicit boolean and scope matches current dependency/workflow state", () => {
+test("activation is explicit and changed foundation scope cannot carry approval forward", () => {
   const control = JSON.parse(
     readFileSync("security/rust-advisory-exception.json", "utf8"),
   );
   assert.deepEqual(Object.keys(control), ["enabled"]);
   assert.equal(typeof control.enabled, "boolean");
-  assert.equal(dependencyState(), scope.stateSha256);
+  const actualState = dependencyState();
+  if (actualState !== scope.stateSha256) {
+    // BUILD 001 deliberately does not refresh or inherit BUILD 000 risk acceptance.
+    assert.equal(
+      control.enabled,
+      false,
+      "Changed, unapproved scope must remain disabled",
+    );
+    const input = candidate();
+    input.stateSha256 = actualState;
+    block(input, /state changed/);
+  }
 });
 test("only the exact live-report shape can use synthetic valid approval", () => {
   const result = evaluateGate(candidate());

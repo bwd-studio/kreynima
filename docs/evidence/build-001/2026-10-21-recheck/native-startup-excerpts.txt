@@ -1,0 +1,31 @@
+Attempt 1: default user directories (excerpt)
+
+(process:29365): dconf-CRITICAL **: 17:44:35.565: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:35.565: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:35.565: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:35.565: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:35.565: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+thread 'main' (31568) panicked at /tmp/kreynima-cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.12.4/src/app.rs:1444:11:
+Failed to setup app: Read-only file system (os error 30)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+(process:29365): dconf-CRITICAL **: 17:44:38.601: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:38.601: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:38.601: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:38.601: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+(process:29365): dconf-CRITICAL **: 17:44:38.601: unable to create directory '/home/agent/.cache/dconf': Read-only file system.  dconf will not work properly.
+
+Attempt 2: XDG cache/data/config/runtime directories under /tmp
+
+** (kreynima-desktop:31718): ERROR **: 17:45:23.632: Unable to spawn a new child process: Failed to spawn child process “/usr/lib/x86_64-linux-gnu/webkit2gtk-4.1/WebKitNetworkProcess” (No such file or directory)
+
+Temporary namespace attempt failed: bwrap: setting up uid map: Read-only file system
