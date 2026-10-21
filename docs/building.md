@@ -37,6 +37,8 @@ Confirm `xcrun --sdk macosx --show-sdk-path` succeeds in that environment, then 
 
 ## Manual native window smoke test
 
+**BUILD 001 testers:** stay on `feat/build-001-drawing` and follow the [drawing-specific procedure](build-001.md#try-it-visually-on-windows-or-macos). The numbered baseline procedure below describes BUILD 000; do not switch to its branch or expect its old status-only screen when testing BUILD 001. The native prerequisites and executable build/launch commands still apply. On Windows PowerShell, if npm loses the extra `--` arguments, use `cmd /c "npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked"`.
+
 For the short launch/window/close procedure and the results table, use [native-smoke-test.md](native-smoke-test.md).
 
 A successful compile in a hosted runner does not confirm a visible, usable native window. BUILD 000 CI is configured to compile the application but does not exercise an interactive Windows/macOS desktop session. Perform this procedure on each target OS with an interactive logged-in user; record the exact commit, OS version, CPU architecture, Rust/Node versions, commands, exit status, and observed result in the validation record.

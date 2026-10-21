@@ -33,3 +33,7 @@ BUILD 001 changes code and the dependency-state fingerprint. The BUILD 000 RUSTS
 ## Browser-only development check
 
 For a frontend-only visual session, `npm run dev` serves the UI at localhost:1420. This is not a native application launch. `npm run test:ui` builds the production frontend and runs Playwright against Vite preview; install its browser with `npx playwright install chromium` first (CI also installs system prerequisites). To use an already installed Chromium, set `KREYNIMA_CHROMIUM` to its executable path. Normal `npm run check` runs model/protocol/security tests without requiring a browser; the separate CI drawing job runs browser tests.
+
+## Next-step proposal
+
+[Persistent project saving and paired desktop MCP control](build-001-follow-up-proposal.md) are proposed as two separate small changes. They are not implemented. The [latest native-test attempt](build-001-validation.md#native-drawing-test-request--latest-recheck) remains blocked by the attached Linux environment; browser screenshots and native compilation are not substitutes for Windows/macOS drawing-window tests.

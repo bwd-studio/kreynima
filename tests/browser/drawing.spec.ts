@@ -137,3 +137,78 @@ test("scaled canvas coordinates remain in project units and new edits clear redo
     page.getByRole("button", { name: "Undo", exact: true }),
   ).toBeDisabled();
 });
+
+test("same-session resize preserves existing geometry and new pointer positions; reload discards the session", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  await page.getByLabel("Brush color").fill("#2277cc");
+  await draw(page, [
+    [120, 160],
+    [350, 190],
+  ]);
+  await draw(page, [[200, 240]]);
+  const firstPath = await page
+    .locator("path[data-stroke-id]")
+    .first()
+    .getAttribute("d");
+  const originalBounds = await page
+    .getByRole("img", { name: "Drawing canvas" })
+    .boundingBox();
+  await page.getByRole("button", { name: "Add layer", exact: true }).click();
+  await page.getByLabel("Brush color").fill("#e85944");
+  await page.getByLabel("Brush size").fill("22");
+  await draw(page, [
+    [150, 100],
+    [320, 220],
+  ]);
+  await expect(page.locator("path[data-stroke-id]").last()).toHaveAttribute(
+    "stroke-width",
+    "22",
+  );
+  await page.getByRole("button", { name: "Layer 1", exact: true }).click();
+  await page.getByLabel("Brush color").fill("#23754c");
+  await page.getByLabel("Brush size").fill("12");
+  await draw(page, [[400, 240]]);
+  await expect(
+    page.locator('g[data-layer-id="layer-1"] [data-stroke-id]'),
+  ).toHaveCount(3);
+  await expect(page.locator("[data-stroke-id]")).toHaveCount(4);
+  await page.screenshot({
+    path: "test-results/drawing-before-resize.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 760, height: 1000 });
+  const resizedBounds = await page
+    .getByRole("img", { name: "Drawing canvas" })
+    .boundingBox();
+  expect(resizedBounds!.width).toBeLessThan(originalBounds!.width);
+  await expect(page.locator("path[data-stroke-id]").first()).toHaveAttribute(
+    "d",
+    firstPath!,
+  );
+  await draw(page, [[480, 270]]);
+  await expect(page.locator("[data-stroke-id]")).toHaveCount(5);
+  const dot = page.locator('g[data-layer-id="layer-1"] circle').last();
+  expect(Number(await dot.getAttribute("cx"))).toBeCloseTo(480, 0);
+  expect(Number(await dot.getAttribute("cy"))).toBeCloseTo(270, 0);
+  await expect(dot).toHaveAttribute("fill", "#23754c");
+  await expect(dot).toHaveAttribute("r", "6");
+  await page.screenshot({
+    path: "test-results/drawing-after-resize.png",
+    fullPage: true,
+  });
+  await page.reload();
+  await expect(page.locator("[data-stroke-id]")).toHaveCount(0);
+  await expect(page.locator("g[data-layer-id]")).toHaveCount(1);
+  await expect(
+    page.getByRole("button", { name: "Undo", exact: true }),
+  ).toBeDisabled();
+  await page.screenshot({
+    path: "test-results/drawing-after-reload.png",
+    fullPage: true,
+  });
+  expect(errors).toEqual([]);
+});
