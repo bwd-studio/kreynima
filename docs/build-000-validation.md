@@ -35,6 +35,23 @@ The hard expiry is executable policy: **2026-11-20T22:00:00.000Z (November 20, 2
 - Independent `cargo deny ... check licenses bans sources`: passes with existing duplicate-version/unused-allowance warnings. `cargo fmt --check` passes. `npm audit --audit-level=high`: zero known vulnerabilities reported. actionlint 1.7.7 and diff checks pass.
 - No native application/Rust source, dependency version, lockfile, GPL license, trademark, or brand policy changed in this implementation. New hosted runs are required to verify workflow/artifact integration; their results are separate from baseline `735224e`.
 
+### Hosted verification of the disabled implementation
+
+Initial implementation `70b6d96` and hardened implementation `e17bb6fbc7a3423cf3f49231c0f3ee6c74466cbe` were pushed without enabling the control or setting an approval variable. On [hardened push run 39628082914](https://github.com/bwd-studio/kreynima/actions/runs/39628082914):
+
+| Check                                  | Observed result                                                                                                                                                                                                        |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| JavaScript Linux / Windows / macOS     | **Pass**, jobs 119318597437 / 119318597467 / 119318597609; includes all 15 tests                                                                                                                                       |
+| Full unfiltered advisory capture       | **Captured successfully**, actual scanner finding and nonzero exit retained; this step is not a scan pass                                                                                                              |
+| Independent license, ban, source check | **Pass**, in job 119318597131                                                                                                                                                                                          |
+| Companion advisory gate                | **Blocked as required**, finding count 1, acceptance applied **NO**, “Exception disabled or maintainer approval missing”                                                                                               |
+| Raw evidence upload after gate failure | **Pass**, six report files uploaded as [artifact 12357622862](https://github.com/bwd-studio/kreynima/actions/runs/39628082914/artifacts/12357622862); 16,470 bytes; metadata confirms not expired and 90-day retention |
+| Native reruns on this implementation   | macOS was running and Windows was queued at this observation. No native/Rust/application source changed; both baseline native jobs at `735224e` passed. These reruns are not claimed passed until complete.            |
+
+The live hosted gate validated the report and exact state before blocking for absent approval, rather than failing due to parser/scope drift. Its log and summary retain RUSTSEC-2024-0370 and the hard expiry/review dates. Artifact ZIP digest reported by GitHub: `73e4c6d46de4f82fd44c059e87f36edc732d4fa158e57f7154263052a41ed08a`. Uploaded evidence was confirmed through the job log and artifact metadata; no activated production acceptance was exercised. Positive acceptance is tested only with synthetic records in unit tests.
+
+The hardened state fingerprint includes gate scripts and security tests/fixtures as well as program/configuration/dependency files. A later accepted decision retains validated public approver/review metadata for audit. The final validation update is documentation only and will have separate CI runs; it does not activate the gate or change the tested policy code.
+
 ### Remaining approval requirements
 
 The maintainer must review and explicitly approve both the [scoped residual-risk terms](dependencies/RUSTSEC-2024-0370-risk-acceptance-proposal.md) and this concrete implementation/activation plan, verify actual approval author/permalinks and scope digest, and authorize any activation separately. The unfiltered finding must remain recorded as a finding after activation; a companion gate pass means accepted risk, not remediation. Review the recorded native smoke-test evidence and all other required checks/governance gates. Leaving draft, merging, public release, and BUILD 001 each remain separate decisions not authorized by this task. Outstanding legal/distribution/reporting-contact requirements are not waived.
