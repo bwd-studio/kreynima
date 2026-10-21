@@ -24,9 +24,22 @@ The first browser run passed 2/3 tests; the hidden-layer assertion failed becaus
 
 The 25 unit/protocol tests include strict model/schema rejection, duplicate IDs and references, geometry and aggregate limits, detached snapshots, revision conflicts, atomic failure, layer operations, swept eraser geometry, history/redo (including dense-snapshot pruning by aggregate point budget), two isolated sessions, and real stdio MCP/engine parity for every command type. Unknown shell/Python/exec tools and injected fields remain rejected. These tests do not establish complete security or ChatGPT/Claude product compatibility.
 
-## Hosted evidence at the first implementation commit
+## Hosted evidence by exact commit
 
-PR [run 39643827163](https://github.com/bwd-studio/kreynima/actions/runs/39643827163), commit `10c4c9971b31539eb6baaaf1c27a31d98457c948`, was inspected through the GitHub Actions API. JavaScript jobs on Ubuntu (119374041509), Windows (119374041740) and macOS (119374041554) completed **success**; browser UI job 119374041129 completed **success**. Native Windows/macOS jobs and the Rust dependency job were still running at this observation. This is evidence for that exact commit, not a claim that later runs passed. The follow-up changes tighten production-browser/reload and history-budget tests without changing drawing implementation. Final branch checks must be inspected separately before acceptance.
+PR [run 39643827163](https://github.com/bwd-studio/kreynima/actions/runs/39643827163), commit `10c4c9971b31539eb6baaaf1c27a31d98457c948`, completed with the following confirmed job results:
+
+| Job                                                                              | Result                                                                                                                                         |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| JavaScript Ubuntu / Windows / macOS (119374041509 / 119374041740 / 119374041554) | **Success**, including unit/protocol tests, builds, formatting and audit                                                                       |
+| Browser UI (119374041129)                                                        | **Success**, all three development-server browser tests                                                                                        |
+| Native Windows (119374041406) and macOS (119374041483)                           | **Success**, Rust formatting, locked check/test and native Tauri build; no interactive drawing-window test                                     |
+| Rust dependency review (119374041530)                                            | **Failure**, correctly blocking at the advisory gate; capture and independent licenses/bans/sources **passed**, raw artifact upload **passed** |
+
+The Rust job log confirms one finding, acceptance **NO**, gate reason “Dependency, workflow, graph, or advisory state changed,” and exit 1. Its [six-file raw-report artifact](https://github.com/bwd-studio/kreynima/actions/runs/39643827163/artifacts/12365753308) was uploaded after failure. This is confirmation from job steps/logs, not a claim to have inspected the artifact ZIP.
+
+Follow-up test/configuration commit `415ede216cd03c54e6b146fa616c2d0f0cbd41c3`, PR [run 39644161149](https://github.com/bwd-studio/kreynima/actions/runs/39644161149): JavaScript Ubuntu/Windows/macOS (119375217227 / 119375217368 / 119375217421) and production-browser UI (119375217188) **passed**. Rust dependency review 119375216754 **failed** at the advisory gate; capture, independent integrity checks and artifact upload **passed**. Windows native rerun was in progress and macOS native rerun queued at the recorded observation. The drawing implementation is unchanged from `10c4c99`; the follow-up tightens production-browser/reload and history-budget tests. Prior native success is not represented as success of unfinished reruns. Later documentation-only updates have separate run results; inspect the current required checks before any acceptance.
+
+After a clean `npm ci`, local `npm run check` passed again on the follow-up state (25 tests). The checked-in false control, original scope, Rust lockfile, native source/configuration, GPL license and brand policies were verified unchanged against the foundation branch. PR #1 was rechecked through GitHub: still draft, unmerged, head `2b8886d`.
 
 ## Dependency/security disposition
 
