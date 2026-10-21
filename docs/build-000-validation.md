@@ -33,7 +33,9 @@ Implementation under test: `3b1c9176df8206b0dcc83753f47d4f16d67d1c49` on the exi
 - Actions enablement is **unconfirmed**. The connected GitHub fetch tool rejects `/actions/permissions` and `/actions/workflows` as unsupported endpoint families. The CLI settings request returned `Forbidden`. Available tools have no workflow enable/dispatch operation. No settings or organization policy were changed. Administrator confirmation of settings/approval/policy/runner availability is still required; do not infer that Actions is enabled from the presence of YAML.
 - Added `workflow_dispatch` as a future recovery path, matrix `fail-fast: false`, job timeouts, locked CI-mode Tauri builds, a pinned cargo-deny version, full npm audit including development dependencies, and Rust advisory checks. Manual dispatch generally requires the workflow on the default branch; do not merge this PR to obtain it. A new branch push was sent successfully, but execution was not observed.
 
-The maintainer subsequently reported that the Actions settings issue was fixed. A fresh documentation push will test triggering; that report alone is not a passed run or native-build result.
+The maintainer subsequently reported the Actions issue fixed. A fresh push of `065ae5a65ffe752ed4c88db5d8b951e182b98d2f` then produced both [PR run 39533637206](https://github.com/bwd-studio/kreynima/actions/runs/39533637206) and [push run 39533636100](https://github.com/bwd-studio/kreynima/actions/runs/39533636100). The Actions page changed from 404 to 200. **Workflow availability and push/PR triggering are now confirmed**, superseding the earlier unconfirmed enablement/empty-run observations. The precise setting changed was not provided and is not independently asserted. Both target native jobs were created; job results are recorded below when available.
+
+The first hosted Windows JavaScript job failed Prettier across the checkout while Linux/macOS JavaScript jobs passed. The checkout used Windows line endings; added `.gitattributes` to require LF for text while preserving binary icons. This fix requires confirmation by a fresh Windows run.
 
 ### Executed checks and results
 
