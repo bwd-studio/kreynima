@@ -2,7 +2,7 @@
   "advisory": "RUSTSEC-2024-0370",
   "package": "proc-macro-error",
   "version": "1.0.4",
-  "stateSha256": "08a5a455c4086a0d8a47c286c333b70fc504c1bbf70ba413defbf5745f2bba49",
+  "stateSha256": "951cb51696e7e814d8f3de3d76a94c1b301400312ad2c39654a24d231a0a06b8",
   "graphSha256": "07a57d938e490937c304a4eab364b625a87933b9e6a21957e5bc170d315aae17",
   "advisorySha256": "f92c05da4681f2afb5131773561820f3e3573de3f24554f512b98031d92c7bb2"
 }

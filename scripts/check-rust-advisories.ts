@@ -8,13 +8,16 @@ import {
   evaluateGate,
   ADVISORY,
   type Report,
+  type Decision,
+  EXPIRES_AT,
+  REVIEW_AT,
   type Scope,
 } from "./rust-security-policy.ts";
 import { dependencyState } from "./rust-security-state.ts";
 
 const dir = "security-reports";
 mkdirSync(dir, { recursive: true });
-let decision;
+let decision: Decision;
 try {
   const report = JSON.parse(readFileSync(`${dir}/scan.json`, "utf8")) as Report;
   // Ensure the preserved artifact and adjudicated evidence are the same bytes.
@@ -52,7 +55,7 @@ try {
   };
 }
 writeFileSync(`${dir}/decision.json`, JSON.stringify(decision, null, 2) + "\n");
-const summary = `## Rust advisory gate\n\n- Gate: **${decision.accepted ? "PASS" : "BLOCKED"}**\n- Temporary acceptance applied: **${decision.exceptionUsed ? "YES" : "NO"}**\n- Finding count: ${decision.findings ?? "unknown"}\n- ${decision.reason}\n- ${ADVISORY} is never removed from the raw report. A gate pass under acceptance is not a clean scan or remediation.\n- Full raw scanner JSON, exit status, state fingerprint, decision, and integrity report: rust-security-report artifact.\n`;
+const summary = `## Rust advisory gate\n\n- Gate: **${decision.accepted ? "PASS" : "BLOCKED"}**\n- Temporary acceptance applied: **${decision.exceptionUsed ? "YES" : "NO"}**\n- Finding count: ${decision.findings ?? "unknown"}\n- ${decision.reason}\n- ${ADVISORY} is never removed from the raw report. A gate pass under acceptance is not a clean scan or remediation.\n- Hard expiry: ${EXPIRES_AT}; required review from: ${REVIEW_AT}.\n${decision.approval ? `- Approval: ${decision.approval.approvalUrl}; reviewer: ${decision.approval.by}; reviewed: ${decision.approval.reviewUrl} at ${decision.approval.reviewedAt}.\n` : ""}- Full raw scanner JSON, exit status, state fingerprint, decision, and integrity report: rust-security-report artifact.\n`;
 process.stdout.write(summary);
 if (process.env.GITHUB_STEP_SUMMARY)
   appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);

@@ -55,7 +55,16 @@ export interface Decision {
   accepted: boolean;
   exceptionUsed: boolean;
   reason: string;
-  findings: number;
+  findings: number | null;
+  approval?: {
+    by: string;
+    approvedAt: string;
+    approvalUrl: string;
+    reviewedAt: string;
+    reviewUrl: string;
+    expiresAt: string;
+    scopeSha256: string;
+  };
 }
 
 // Order-independent dependency nodes/edges, including both macro introducers.
@@ -239,6 +248,15 @@ export function evaluateGate(input: GateInput): Decision {
       exceptionUsed: true,
       reason: `${ADVISORY} remains present; time-limited maintainer acceptance applied`,
       findings,
+      approval: {
+        by: "BuildWithDani",
+        approvedAt: approval.approvedAt as string,
+        approvalUrl: approval.approvalUrl as string,
+        reviewedAt: approval.reviewedAt as string,
+        reviewUrl: approval.reviewUrl as string,
+        expiresAt: EXPIRES_AT,
+        scopeSha256: digest(scope),
+      },
     };
   } catch (error) {
     return fail(
