@@ -1,12 +1,12 @@
 # BUILD 000 validation and open gates
 
-**BUILD 000 is not yet complete.** Native compilation and JavaScript/MCP checks have passed on hosted target runners, and an interactive macOS Apple Silicon window launch has been recorded. The interactive Windows native window launch remains unverified, and the full Rust dependency review fails on an upstream maintenance advisory. No merge or BUILD 001 work was performed.
+**BUILD 000 is not yet complete.** Native compilation and JavaScript/MCP checks have passed on hosted target runners. Interactive native window launches have now been recorded on macOS Apple Silicon and Windows 11 Pro x64. The full Rust dependency review still fails on an upstream maintenance advisory. No merge or BUILD 001 work was performed.
 
-This record was updated on 2026-10-21 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The macOS smoke test used program commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. This evidence update is documentation and ignore-rule housekeeping only; it does not change the tested program or workflow.
+This record was updated on 2026-10-21 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The macOS smoke test used program commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. The Windows smoke test used program commit `ddd23b0a6f847c7d4bec3234782ebb05a4b1b257`; `git diff --stat 089503e..ddd23b0 -- apps packages` was empty, so the desktop program matches the macOS-tested tree. This evidence update is documentation only; it does not change the tested program, workflow, or Rust advisory checks.
 
 ## Final release-gate preparation: `585e8bc`
 
-Checked on 2026-10-21 against exact commit `585e8bcb37141d0b7054616c0cacd9d4b022fe60`. The macOS smoke-test evidence added by that commit is preserved below; this Linux cloud session did not reperform that interactive test. Windows interactive development and built-executable tests remain **Not run**.
+Checked on 2026-10-21 against exact commit `585e8bcb37141d0b7054616c0cacd9d4b022fe60`. The macOS smoke-test evidence added by that commit is preserved below; this Linux cloud session did not reperform that interactive test. Windows interactive development and built-executable tests were later recorded against `ddd23b0` as documented in [Windows interactive smoke test](#windows-interactive-smoke-test).
 
 [Push run 39573790976](https://github.com/bwd-studio/kreynima/actions/runs/39573790976) completed all six jobs:
 
@@ -34,7 +34,7 @@ The [existing investigation](dependencies/RUSTSEC-2024-0370.md) was reviewed. Th
 Before merge, the maintainer must separately:
 
 1. Approve the exact proposed temporary risk terms and ownership with timestamp/permalink, or require a supported dependency fix. Decide explicitly how any still-failing required advisory check is handled under repository policy; this document authorizes no bypass or silent suppression.
-2. Obtain and review the **Windows interactive** smoke-test evidence for development and built executables, including visible content, startup errors, clean close and relaunch. Review the recorded macOS Apple Silicon evidence at `089503e` and any program changes since it. Compilation alone cannot satisfy this requirement.
+2. Review the recorded **Windows interactive** smoke-test evidence at `ddd23b0` and the macOS Apple Silicon evidence at `089503e`, including visible content, startup errors, clean close and relaunch. Compilation alone cannot satisfy this requirement. Windows ARM and macOS Intel remain untested.
 3. Review all other required checks and applicable governance/security gates; acknowledge outstanding legal/distribution requirements before any release. This single-advisory proposal waives none of them.
 4. Explicitly authorize taking PR #1 out of draft and merging after the applicable gates are satisfied. Neither is authorized by this preparation task. BUILD 001 remains out of scope.
 
@@ -122,9 +122,9 @@ Both push and PR runs completed and confirm all five platform jobs passed on `16
 
 Rechecked locally for this documentation follow-up: `npm run check` passed, inverse target trees and registry/update checks completed, and `cargo deny ... check advisories licenses bans sources` failed only on the advisory while the remaining categories passed. No Rust/application code changed, so target native jobs above are the relevant compiled-source evidence; Linux native compilation remains blocked by missing system prerequisites as previously recorded.
 
-A [short native smoke-test checklist](native-smoke-test.md) supplies Windows PowerShell and macOS Terminal commands: launch, verify the development window, inspect startup errors, close, and reopen; repeat against the built executable without Vite. The macOS Apple Silicon interactive result is recorded below. The Windows interactive result remains **Not run**.
+A [short native smoke-test checklist](native-smoke-test.md) supplies Windows PowerShell and macOS Terminal commands: launch, verify the development window, inspect startup errors, close, and reopen; repeat against the built executable without Vite. The macOS Apple Silicon interactive result is recorded below. The Windows 11 Pro x64 interactive result is recorded in [Windows interactive smoke test](#windows-interactive-smoke-test).
 
-The draft is ready for maintainer review of the foundation and documented dependency disposition. BUILD 000 acceptance remains incomplete and the PR must stay draft: resolve/review the advisory explicitly and obtain the remaining recorded Windows native launch evidence. No merge or BUILD 001 work was performed.
+The draft is ready for maintainer review of the foundation and documented dependency disposition. BUILD 000 acceptance remains incomplete and the PR must stay draft: resolve/review the advisory explicitly. Interactive Windows and macOS Apple Silicon native launch evidence is now recorded. No merge or BUILD 001 work was performed.
 
 ## macOS interactive smoke test
 
@@ -161,23 +161,71 @@ Port 1420 was free before each launch. `npm ci` completed with 0 known JavaScrip
 
 Tauri also wrote generated ACL/capability JSON under `apps/desktop/src-tauri/gen/schemas/`. Those files are host build artifacts, not application source, and are now ignored.
 
-This result covers only macOS 27.0.1 on Apple Silicon at commit `089503e`. It does not verify macOS Intel, other macOS versions, Windows, accessibility, signing, complete security, or release readiness. The configured window title remains **KREYNIMA — Development** for the release binary.
+This result covers only macOS 27.0.1 on Apple Silicon at commit `089503e`. It does not verify macOS Intel, other macOS versions, Windows (see the later Windows session), accessibility, signing, complete security, or release readiness. The configured window title remains **KREYNIMA — Development** for the release binary.
+
+## Windows interactive smoke test
+
+Recorded on 2026-10-21 (America/New_York) against `feat/build-000-foundation` commit `ddd23b0a6f847c7d4bec3234782ebb05a4b1b257`. This is an interactive desktop session on one Windows PC, not a hosted runner compile. Application source under `apps/` and `packages/` is unchanged since the macOS-tested commit `089503e`.
+
+| Item              | Observed value                                                                                                                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OS / architecture | Windows 11 Pro 25H2, build 26200.9711, 64-bit AMD64 (`x86_64-pc-windows-msvc`). `Win32_OperatingSystem.Caption` is Microsoft Windows 11 Pro; `HKLM\...\CurrentVersion.ProductName` still reports Windows 10 Pro.          |
+| Node / npm        | v22.13.0 / 11.1.0                                                                                                                                                                                                         |
+| Rust              | rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1 (5f94df478 2026-08-27). The machine originally had rustc 1.86.0 / rustup 1.23.1, which cannot compile locked Tauri 2.12.4 (`rustc 1.90` required).                      |
+| MSVC              | Visual Studio Build Tools 2022 17.13.6; MSVC 14.43.34808; `cl.exe` 19.43.34810 for x64                                                                                                                                    |
+| Windows SDK       | Windows Software Development Kit 10.0.26100.7705. Before this session, VS listed `Microsoft.VisualStudio.Component.Windows11SDK.22621` but `Include`/`Lib`/`bin`, `windows.h`, `kernel32.lib`, and `rc.exe` were missing. |
+| WebView2          | Microsoft Edge WebView2 Runtime 155.0.4283.62                                                                                                                                                                             |
+| Tester            | Cursor agent on the maintainer Windows PC                                                                                                                                                                                 |
+
+Prerequisites installed during this session, with explicit operator approval: `rustup self update` (1.23.1 → 1.29.2), `rustup toolchain install stable --force` (rustc 1.86.0 → 1.99.1), and elevated `winsdksetup.exe /features + /quiet /norestart` for SDK 10.0.26100.7705. No Cargo.lock, workflow, or advisory-check changes were made.
+
+Commands, from the repository root. Port 1420 was free before each launch.
+
+```sh
+npm ci
+npm run check
+npm run desktop
+```
+
+The documented release build was run through `cmd.exe` because Windows PowerShell consumed extra `--` tokens and turned the command into `tauri build --locked`:
+
+```bat
+cmd /c "npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked"
+```
+
+```powershell
+& ./apps/desktop/src-tauri/target/release/kreynima-desktop.exe
+```
+
+`npm ci` completed with 0 known JavaScript vulnerabilities. `npm run check` passed: TypeScript, ESLint, Prettier, two JavaScript/MCP tests, the MCP and desktop JavaScript builds, and the production license allowlist (100 packages). The first `npm run desktop` attempt failed before a window with `rustc 1.86.0 is not supported` (Tauri 2.12.4 requires rustc 1.90). After the approved toolchain update, the same command compiled and launched.
+
+| Check                                  | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Development launch (`npm run desktop`) | **Pass**. Cargo finished the `dev` profile in 2m 13s and ran `kreynima-desktop.exe`. A native window of class `Tauri Window` opened; it was not a browser tab. Title: **KREYNIMA — Development**. Visible content: **KREYNIMA**, **BuildWithDani · BUILD 000**, **Development foundation**, and “No project is open.” Startup logs had no compile error or Rust panic after the toolchain update. Screenshot: [dev-launch.png](evidence/windows-smoke-test/dev-launch.png). |
+| Resize / minimize / restore            | **Pass**. Window resized from 1116×799 to 780×560 with readable BUILD 000 text (a vertical scrollbar appeared at the smaller size). Restore-size 1100×760 still showed the same content. Minimize moved the window off-screen (`IsIconic=true`); restore returned 1100×760 with the same title and content. The process stayed responding.                                                                                                                                  |
+| Development close / relaunch           | **Pass**. `WM_CLOSE` ended `kreynima-desktop` and the `npm run desktop` watcher with exit code 0. Port 1420 was then free. A second `npm run desktop` opened the same titled window and BUILD 000 content (Cargo rebuilt in 10.47s). Closing again exited 0. No crash dialog appeared.                                                                                                                                                                                      |
+| Release build                          | **Pass**. `cmd /c "npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked"` exited 0 in 2m 59s and wrote `apps/desktop/src-tauri/target/release/kreynima-desktop.exe` (8,636,416 bytes, FileDescription/ProductName **KREYNIMA**, version 0.0.0). This is an unsigned local executable, not an installer.                                                                                                                                                 |
+| Release launch / close / relaunch      | **Pass**. `& ./apps/desktop/src-tauri/target/release/kreynima-desktop.exe` opened the same titled native window and BUILD 000 content without listening on port 1420. First close ended the process; a second launch reopened the same window; the second close exited 0. No console window, no OS crash dialog, and no Application Error / WER report for this executable. Screenshot: [release-launch.png](evidence/windows-smoke-test/release-launch.png).               |
+
+The configured window title remains **KREYNIMA — Development** for the release binary, matching macOS.
+
+This result covers only Windows 11 Pro 25H2 x64 at commit `ddd23b0`. It does not verify Windows ARM, other Windows versions, accessibility, signing, complete security, or release readiness.
 
 ## Acceptance gates
 
-| BUILD 000 criterion                                 | Assessment                                                                                                                                                                                                      |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Development app launches in a supported environment | **Partially met**. macOS 27.0.1 arm64 interactive development and release launches passed on `089503e`. Hosted native compilation passed on both target runners. Windows interactive launch remains unverified. |
-| Governance documents and architecture               | Present for BUILD 000 scope; legal review/reporting-contact gates remain documented.                                                                                                                            |
-| MCP launches and is tested                          | **Met** for the standalone status foundation, including hosted Windows/macOS/Linux tests.                                                                                                                       |
-| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure; the temporary risk proposal is unapproved.                                                                |
-| Applicable checks pass                              | **Partially met**. JavaScript and target compilation pass; the Rust advisory check fails; Linux native checks are blocked.                                                                                      |
-| Blockers documented                                 | **Met** by this record and linked policies.                                                                                                                                                                     |
+| BUILD 000 criterion                                 | Assessment                                                                                                                                                                                                                                                                                                                            |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Development app launches in a supported environment | **Met for the two tested interactive sessions**. macOS 27.0.1 arm64 interactive development and release launches passed on `089503e`. Windows 11 Pro 25H2 x64 interactive development and release launches passed on `ddd23b0`. Hosted native compilation passed on both target runners. Windows ARM and macOS Intel remain untested. |
+| Governance documents and architecture               | Present for BUILD 000 scope; legal review/reporting-contact gates remain documented.                                                                                                                                                                                                                                                  |
+| MCP launches and is tested                          | **Met** for the standalone status foundation, including hosted Windows/macOS/Linux tests.                                                                                                                                                                                                                                             |
+| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure; the temporary risk proposal is unapproved.                                                                                                                                                                                      |
+| Applicable checks pass                              | **Partially met**. JavaScript and target compilation pass; the Rust advisory check fails; Linux native checks are blocked.                                                                                                                                                                                                            |
+| Blockers documented                                 | **Met** by this record and linked policies.                                                                                                                                                                                                                                                                                           |
 
 Before calling BUILD 000 complete:
 
 1. Resolve the Rust maintenance advisory upstream or establish an explicitly reviewed disposition without silently hiding it.
-2. Perform and record the [minimal native smoke test](building.md#manual-native-window-smoke-test) on the remaining interactive Windows system: development and built executable launch, readable content, resize/minimize/restore, clean close and relaunch. The macOS Apple Silicon session is recorded above. CI did not exercise visible desktop sessions. Record commit, OS, architecture, tool versions, and result; do not infer untested architectures.
+2. Review the recorded [minimal native smoke tests](building.md#manual-native-window-smoke-test): macOS Apple Silicon at `089503e` and Windows 11 Pro x64 at `ddd23b0`, including development and built executable launch, readable content, resize/minimize/restore, clean close and relaunch. CI did not exercise visible desktop sessions. Do not infer untested architectures (Windows ARM, macOS Intel, other OS versions).
 3. Establish verified confidential security/conduct contacts and review repository enforcement settings. Obtain legal review of trademark/brand policies, GPL-only interpretation, contribution terms, and distribution obligations before release.
 4. Before distributing releases, separately plan reviewed identifiers/icons, installers, signing/notarization, and complete third-party notices/corresponding source. Those release tasks are not claimed complete by BUILD 000.
 

@@ -35,7 +35,7 @@ kreynima-desktop → tauri 2.12.4 → gtk 0.18.2
 
 Tauri-runtime-wry 2.12.2, Tao 0.37.1, Wry 0.57.0, WebKit2GTK, and Muda also reach this toolkit stack. Both macro introducers matter. Inverse-tree checks found no path to the affected package for Windows x64, macOS Apple Silicon, or macOS Intel; that is resolution evidence, not certification of all those platforms. Actual hosted compilation evidence covers Windows x64 and macOS Apple Silicon only.
 
-The proposed acceptance covers retaining this exact finding in the all-platform dependency inventory of the BUILD 000 Windows/macOS development foundation. It does **not** approve Linux/BSD native build/use/distribution, additional platforms, future BUILD scopes, public binary releases, new dependencies or versions, another advisory on the same package, or a runtime execution vulnerability. The recorded macOS interactive launch is separate evidence. The Windows interactive launch remains **outstanding** and cannot be waived by this proposal.
+The proposed acceptance covers retaining this exact finding in the all-platform dependency inventory of the BUILD 000 Windows/macOS development foundation. It does **not** approve Linux/BSD native build/use/distribution, additional platforms, future BUILD scopes, public binary releases, new dependencies or versions, another advisory on the same package, or a runtime execution vulnerability. The recorded macOS Apple Silicon and Windows 11 Pro x64 interactive launches are separate evidence and cannot be waived by this proposal. Windows ARM and macOS Intel remain untested.
 
 ## Justification and residual risk
 
@@ -67,11 +67,11 @@ If the maintainer later requests an automated scoped exception, a concrete imple
 
 ## Explicit approval record and merge prerequisites
 
-Before accepting this risk, the maintainer must record: decision (approve/reject), their identity, approval timestamp and permalink, the exact package/advisory/lockfile scope, interim review and hard expiry, ownership, and acknowledgement that Windows interactive testing and other gates remain mandatory. Until then, **accepted risks: none**.
+Before accepting this risk, the maintainer must record: decision (approve/reject), their identity, approval timestamp and permalink, the exact package/advisory/lockfile scope, interim review and hard expiry, ownership, and acknowledgement that recorded interactive smoke-test evidence and other gates remain mandatory. Until then, **accepted risks: none**.
 
 Before any merge, separately require:
 
 1. Explicit risk acceptance under these terms or a verified supported fix, and an explicit decision on how any still-failing required advisory check is handled under repository policy. This proposal authorizes no check-policy bypass.
-2. Recorded passing Windows interactive development and built-executable smoke tests at the relevant program state; review of the recorded macOS evidence and any changes since its tested commit.
+2. Review of the recorded Windows 11 Pro x64 interactive development and built-executable smoke tests at `ddd23b0` and the macOS Apple Silicon evidence at `089503e`, including any program changes since those tested commits.
 3. Review of all other required check results and remaining governance/security/legal gates. This proposal waives none of them and grants no release-readiness claim.
 4. An explicit maintainer decision to take PR #1 out of draft and separate authorization to merge. This task grants neither and does not authorize BUILD 001.
