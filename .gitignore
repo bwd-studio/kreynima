@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# KREYNIMA native build output and host metadata
+target/
+# Tauri-generated ACL/capability schemas; recreated by `tauri dev` and `tauri build`
+apps/desktop/src-tauri/gen/
+.DS_Store
+
+# Unfiltered security scan evidence (uploaded by CI)
+security-reports/

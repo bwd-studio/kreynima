@@ -1,0 +1,36 @@
+{
+  "name": "kreynima",
+  "version": "0.0.0",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @kreynima/desktop",
+    "desktop": "npm run tauri -w @kreynima/desktop -- dev",
+    "build": "npm run build -w @kreynima/mcp-server && npm run build -w @kreynima/desktop",
+    "mcp": "node apps/mcp-server/dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run build -w @kreynima/mcp-server && node --import tsx --test tests/*.test.ts",
+    "licenses": "node scripts/check-licenses.mjs",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run licenses"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "tsx": "^4.20.6",
+    "eslint": "^9.39.0",
+    "@eslint/js": "^9.39.0",
+    "typescript-eslint": "^8.46.0",
+    "prettier": "^3.6.2",
+    "@types/node": "^22.18.0"
+  }
+}

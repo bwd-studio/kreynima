@@ -1,0 +1,53 @@
+# BUILD 000 native smoke test
+
+Run this on a real interactive Windows session and a real interactive macOS session. CI compilation is not evidence of a visible window launch. Interactive tests have been recorded for macOS Apple Silicon and Windows 11 Pro x64; other architectures remain unverified.
+
+Prerequisites: check out the PR commit being tested, install Node 22.12+ and stable Rust, and follow [platform prerequisites](building.md). Windows needs MSVC/Windows SDK and WebView2; macOS needs Xcode Command Line Tools. If the selected Xcode license is unaccepted, use the session-only `DEVELOPER_DIR` workaround in [building.md](building.md#macos-command-line-tools-and-xcode-license) rather than changing the system developer directory. Stop other servers using port 1420.
+
+From the repository root, on either OS:
+
+```sh
+npm ci
+npm run desktop
+```
+
+1. Confirm a native window titled **KREYNIMA — Development** opens. Verify **KREYNIMA**, **BUILD 000**, **Development foundation**, and the message that no project is open are visible. A browser tab alone does not pass.
+2. Check the terminal for startup errors, crashes, or Rust panic output. Record any errors and blank/missing UI as a failure; do not infer success from the process remaining alive.
+3. Close the window normally. Stop the watcher with Ctrl+C if it remains running. Confirm there was no crash/panic and launch once more to verify it can reopen.
+
+For the built executable, also run:
+
+```sh
+npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked
+```
+
+On Windows PowerShell, extra `--` tokens can be consumed before they reach npm, producing `tauri build --locked` and a CLI error. If that happens, run the same command through `cmd.exe`:
+
+```bat
+cmd /c "npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked"
+```
+
+Stop the development server, then launch the executable and repeat the three checks above:
+
+Windows PowerShell:
+
+```powershell
+& ./apps/desktop/src-tauri/target/release/kreynima-desktop.exe
+```
+
+macOS Terminal:
+
+```sh
+./apps/desktop/src-tauri/target/release/kreynima-desktop
+```
+
+A Windows release build has no console window, so also record any OS crash dialog or Event Viewer Application Error for this executable if one occurs. A visible window and clean close are still required; lack of console output alone proves nothing. This is an unsigned local executable, not an installer or notarized release.
+
+Record actual observations in docs/build-000-validation.md, including exact commit, OS version, CPU architecture, Node/Rust versions, dev/built executable tested, observed window, startup errors, clean close/relaunch, and tester/date. Attach redacted terminal output or screenshots if available. Record failures; leave untested rows unverified.
+
+| Platform                                  | Development launch | Built executable launch | Startup errors / close / relaunch                                                                                                                              |
+| ----------------------------------------- | ------------------ | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows 11 Pro 25H2 x64, commit `ddd23b0` | Pass               | Pass                    | Pass: no observed crashes, Rust panics, or Event Viewer Application Errors; resize, minimize, restore; both executables closed and relaunched with exit code 0 |
+| macOS 27.0.1 arm64, commit `089503e`      | Pass               | Pass                    | Pass: no observed crashes or Rust panics; resize, minimize, restore; both executables closed and relaunched with exit code 0                                   |
+
+The recorded observations, commands, and environment are in [docs/build-000-validation.md](build-000-validation.md#macos-interactive-smoke-test) and [the Windows section](build-000-validation.md#windows-interactive-smoke-test). A pass covers only that OS/architecture and commit. It does not verify animation features, general compatibility, signing, complete security, or release readiness.

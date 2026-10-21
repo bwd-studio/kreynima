@@ -1,0 +1,36 @@
+html {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #101419;
+  color: #e9edf3;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 760px;
+  margin: 12vh auto;
+  padding: 32px;
+}
+h1 {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  letter-spacing: 0.08em;
+  margin: 16px 0;
+}
+p {
+  line-height: 1.7;
+  color: #b9c4d1;
+}
+.eyebrow {
+  color: #8ce3bf;
+  letter-spacing: 0.1em;
+}
+section {
+  border: 1px solid #34404e;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 40px;
+}
+h2 {
+  font-size: 1.2rem;
+}
