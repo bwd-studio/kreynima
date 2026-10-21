@@ -19,3 +19,9 @@ Use npm workspaces and one committed lockfile. Shared TypeScript packages run in
 Both adapters use the same engine. The standalone server does not share live state with the desktop; that requires an explicit authenticated session bridge in a later build. Do not add a second project engine in the server. Pure packages must not depend on React, Tauri, or MCP. Keep project-format at the bottom of the dependency graph. Future engines consume it; command-engine orchestrates them; adapters call command-engine.
 
 Local rendering and FFmpeg are future work. No hosted model, video generation service, or paid dependency is required. Director, Artist, and Co-Create modes eventually operate on the same editable data, not flattened AI videos.
+
+## BUILD 001 drawing slice
+
+The separate BUILD 001 branch depends on draft PR #1 and adds [validated project data](project-model.md), [shared commands/history](commands.md), SVG canvas input and isolated MCP drawing tools. The table above is the historical BUILD 000 baseline. Current responsibilities: project-format owns Zod schemas/types and limits; drawing-core owns stroke geometry; command-engine owns validated state/history; agent-tools and MCP only adapt that engine; React only collects gestures and renders snapshots. Zod is reused from the existing locked dependency family, with explicit package dependencies. Playwright is a development-only browser test tool.
+
+See [BUILD 001 scope](build-001.md) and [validation](build-001-validation.md). The standalone MCP project remains separate from the desktop. No Rust IPC permissions, native operations or remote transport were added. Animation/timeline/render packages remain reserved.

@@ -6,15 +6,15 @@ import { executeCommand, STATUS_COMMAND } from "@kreynima/command-engine";
 
 test("status is deterministic and rejects unknown commands", () => {
   const result = executeCommand({ type: STATUS_COMMAND });
-  assert.equal(result.projectOpen, false);
-  assert.deepEqual(result.capabilities, [STATUS_COMMAND]);
+  assert.equal(result.sessionScope, "capabilities-only");
+  assert.ok(result.capabilities.includes(STATUS_COMMAND));
   // Runtime boundary must also fail closed for untyped clients.
   assert.throws(() =>
     executeCommand({ type: "shell" as typeof STATUS_COMMAND }),
   );
 });
 test(
-  "stdio MCP exposes only read-only status and rejects execution requests",
+  "stdio MCP exposes bounded drawing tools and rejects execution requests",
   { timeout: 15000 },
   async () => {
     const client = new Client({ name: "foundation-test", version: "0.0.0" });
@@ -31,7 +31,7 @@ test(
       const { tools } = await client.listTools();
       assert.deepEqual(
         tools.map((tool) => tool.name),
-        ["kreynima_status"],
+        ["kreynima_status", "kreynima_project", "kreynima_command"],
       );
       const result = await client.callTool({
         name: "kreynima_status",

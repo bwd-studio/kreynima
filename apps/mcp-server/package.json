@@ -5,12 +5,13 @@
   "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --alias:@kreynima/agent-tools=../../packages/agent-tools/src/index.ts --alias:@kreynima/command-engine=../../packages/command-engine/src/index.ts --outfile=dist/index.js"
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --alias:@kreynima/agent-tools=../../packages/agent-tools/src/index.ts --alias:@kreynima/command-engine=../../packages/command-engine/src/index.ts --alias:@kreynima/project-format=../../packages/project-format/src/index.ts --alias:@kreynima/drawing-core=../../packages/drawing-core/src/index.ts --outfile=dist/index.js"
   },
   "dependencies": {
     "@kreynima/agent-tools": "*",
     "@modelcontextprotocol/sdk": "^1.21.0",
-    "zod": "^3.25.0"
+    "zod": "^3.25.0",
+    "@kreynima/command-engine": "*"
   },
   "devDependencies": {
     "esbuild": "^0.25.12"

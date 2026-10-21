@@ -1,6 +1,6 @@
 # BUILD 001–005 roadmap
 
-These are proposed scopes, not completed functionality. Each build should have focused PRs, passing boundary tests, and honest platform validation.
+The founder has authorized a narrower drawing-first BUILD 001 slice; its [scope](build-001.md) and [validation](build-001-validation.md) supersede item 1 below for this branch. Persistence and recovery are deferred; BUILD 002 scope must be reassessed after review. The numbered list retains the original planning context, not a claim of completed functionality. Each build should have focused PRs, passing boundary tests, and honest platform validation.
 
 1. **BUILD 001 — Project lifecycle:** runtime schemas, stable IDs/units/frame rules, fixture projects, validated create/open/save, migrations policy, atomic writes and recovery. Narrow native filesystem permissions; corrupted-file tests. First resolve BUILD 000 native launch/CI, Cargo lockfile, ownership, and reporting contacts.
 2. **BUILD 002 — Editable drawing:** stroke commands, pressure-aware geometry, layer operations, viewport input, selection, undo/redo. Test replay and geometry invariants. All actions use the shared engine.

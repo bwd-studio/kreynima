@@ -156,3 +156,7 @@ apps/desktop/src-tauri/gen/
 
 # Unfiltered security scan evidence (uploaded by CI)
 security-reports/
+
+# Browser test traces and screenshots
+test-results/
+playwright-report/
