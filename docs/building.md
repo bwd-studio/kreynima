@@ -23,7 +23,7 @@ Rust license review: install cargo-deny locally or use CI's isolated dependency 
 
 ## Manual native window smoke test
 
-A successful compile in a hosted runner does not confirm a visible, usable native window. BUILD 000 CI compiles the application but does not exercise an interactive Windows/macOS desktop session. Perform this procedure on each target OS with an interactive logged-in user; record the exact commit, OS version, CPU architecture, Rust/Node versions, commands, exit status, and observed result in the validation record.
+A successful compile in a hosted runner does not confirm a visible, usable native window. BUILD 000 CI is configured to compile the application but does not exercise an interactive Windows/macOS desktop session. Perform this procedure on each target OS with an interactive logged-in user; record the exact commit, OS version, CPU architecture, Rust/Node versions, commands, exit status, and observed result in the validation record.
 
 1. Check out `feat/build-000-foundation` at the PR's current commit. On Windows, install MSVC C++ Build Tools/Windows SDK and WebView2; on macOS, install Xcode Command Line Tools. Install stable Rust and Node 22.12+.
 2. From the repository root, run `npm ci`, then `npm run check`. Close any Vite server already using port 1420.
