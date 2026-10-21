@@ -1,6 +1,6 @@
 # Proposed temporary acceptance: RUSTSEC-2024-0370
 
-**PROPOSAL ONLY — NOT APPROVED.** No risk acceptance, check waiver, Cargo exception, or merge approval has been recorded. This document does not change `deny.toml`, CI, dependencies, or branch protection. The advisory check remains failing and visible.
+**PROPOSAL ONLY — NOT APPROVED.** No risk acceptance, check waiver, Cargo exception, or merge approval has been recorded. The [gate implementation](rust-advisory-gate.md) is prepared but disabled. No `deny.toml`, dependency, or branch-protection exception is active. The unfiltered advisory finding and blocking gate remain visible.
 
 ## Decision requested
 
@@ -47,7 +47,7 @@ Residual risk is future unfixed defects and build-host/dependency supply-chain e
 
 ## Controls preserved and immediate review triggers
 
-- Keep the unfiltered `cargo deny ... check advisories licenses bans sources` job enabled with its existing failure result. Do not add an ignore, filter out Linux/BSD graphs, downgrade severity, or use blanket `continue-on-error` in this change.
+- Keep full unfiltered advisory capture plus independently blocking `cargo deny ... check licenses bans sources`. No Cargo ignore, target filter, severity downgrade, or blanket `continue-on-error` is used. The companion gate remains blocked while approval is disabled; raw scanner failures remain preserved even if a future explicit acceptance allows only this finding.
 - Keep all other Rust advisory, source, license, and ban checks, npm audit, production license checks, TypeScript/lint/format/tests, and Windows/macOS build checks unchanged. Other findings are never covered by this proposal.
 - Retain the advisory ID, exact package/version, current dependency paths, linked raw CI output, proposal status, and dates in the PR and validation record. A failed advisory job remains reported as failed; it must never be described as passed because risk is accepted.
 - Recheck the [RustSec record](https://github.com/RustSec/advisory-db/blob/main/crates/proc-macro-error/RUSTSEC-2024-0370.md), [Tauri #10910](https://github.com/tauri-apps/tauri/issues/10910), and published toolkit releases at each review and before any merge decision. Record results, not just a future intention. No monitoring automation is claimed to exist.
@@ -61,9 +61,9 @@ When a viable update appears, prepare the smallest compatible upgrade; verify re
 
 ## Check-policy implications and any later scoped exception
 
-**No automated exception is proposed for implementation in this PR update.** Risk acceptance alone neither makes a required failing check green nor authorizes bypassing branch protection. If repository policy requires a green advisory gate, merging stays blocked until a supported fix or a separately reviewed implementation is approved.
+The maintainer requested a testable mechanism after this proposal was written. It is now [implemented but disabled](rust-advisory-gate.md). The checked-in control is false, no approval variable was set by this task, and no risk has been accepted. Raw all-target findings and scanner exit status are uploaded and printed; licenses/bans/sources retain an independent required step. Other security/build checks remain required. Exact scope/graph/advisory fingerprints and hardcoded expiry are tested, with unrelated findings and stale/invalid evidence remaining blocking.
 
-If the maintainer later requests an automated scoped exception, a concrete implementation and separate approval must precede activation. It must preserve an unmodified all-target raw scan as an uploaded report and a visible job-summary finding even on failure. A companion gate may tolerate only the exact ID/package/version/classification, approved lockfile/chain, and valid approval dates above; it must fail on any other diagnostic, changed state, expired/missing approval, scanner/report failure, malformed output, or missing expected finding. License/source/ban checks must remain independently required and unaffected. Tests must prove an unrelated advisory and an expired proposal still fail. Merely adding an advisory ignore or accepting a scanner's nonzero exit wholesale would not meet this design. None of this filtering or report upload has been implemented by this documentation task.
+Activation requires both a separately reviewed control-file change and a verified maintainer approval record in an administrator-controlled repository variable. Follow the linked exact activation/rollback procedure; implementation approval is not risk approval. A future accepted gate result must be described as accepted residual risk, never as a clean scan. No branch-protection bypass, merge, or BUILD 001 is authorized.
 
 ## Explicit approval record and merge prerequisites
 

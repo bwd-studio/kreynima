@@ -48,6 +48,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo install cargo-deny --version 0.20.2 --locked
-      - run: cargo deny --manifest-path apps/desktop/src-tauri/Cargo.toml check advisories licenses bans sources
+      - run: npm ci
+      - id: scanner
+        run: cargo install cargo-deny --version 0.20.2 --locked
+      - name: Capture full unfiltered advisory report (not a pass/fail decision)
+        if: ${{ !cancelled() && steps.scanner.outcome == 'success' }}
+        run: node --import tsx scripts/capture-rust-advisories.ts
+      - name: Independently blocking license, ban, and source checks
+        if: ${{ !cancelled() && steps.scanner.outcome == 'success' }}
+        shell: bash
+        run: |
+          mkdir -p security-reports
+          cargo deny --manifest-path apps/desktop/src-tauri/Cargo.toml check licenses bans sources > security-reports/integrity.txt 2>&1
+        # A failing exit is preserved; no advisory exception can waive this step.
+      - name: Adjudicate advisories (disabled unless explicitly approved)
+        if: ${{ !cancelled() }}
+        env:
+          KREYNIMA_RUSTSEC_2024_0370_APPROVAL: ${{ vars.KREYNIMA_RUSTSEC_2024_0370_APPROVAL }}
+        run: node --import tsx scripts/check-rust-advisories.ts
+      - name: Preserve raw scan and decision even when blocking
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-security-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: security-reports/
+          if-no-files-found: error
+          retention-days: 90

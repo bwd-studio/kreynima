@@ -1,8 +1,43 @@
 # BUILD 000 validation and open gates
 
-**BUILD 000 is not yet complete.** Native compilation and JavaScript/MCP checks have passed on hosted target runners. Interactive native window launches have now been recorded on macOS Apple Silicon and Windows 11 Pro x64. The full Rust dependency review still fails on an upstream maintenance advisory. No merge or BUILD 001 work was performed.
+**BUILD 000 remains draft and is not declared complete.** Windows 11 Pro x64 and macOS Apple Silicon interactive smoke tests are recorded below, and hosted platform jobs passed on `735224e`. The final security-gate mechanism is implemented but disabled for maintainer review. Accepted risks: **none**. The full Rust advisory finding remains visible and the gate remains blocking until explicit valid approval or supported remediation. No merge or BUILD 001 work was performed.
 
 This record was updated on 2026-10-21 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The macOS smoke test used program commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. The Windows smoke test used program commit `ddd23b0a6f847c7d4bec3234782ebb05a4b1b257`; `git diff --stat 089503e..ddd23b0 -- apps packages` was empty, so the desktop program matches the macOS-tested tree. This evidence update is documentation only; it does not change the tested program, workflow, or Rust advisory checks.
+
+## Final security-gate implementation (2026-10-21)
+
+Verified commit `735224e333d66364d9ee213284dc46d77b027e94` and both completed runs: [push 39618940500](https://github.com/bwd-studio/kreynima/actions/runs/39618940500) and [PR 39618950335](https://github.com/bwd-studio/kreynima/actions/runs/39618950335).
+
+| Check at `735224e`         | Push / PR result                                             |
+| -------------------------- | ------------------------------------------------------------ |
+| JavaScript Linux           | Pass / Pass (119286873357 / 119286905388)                    |
+| JavaScript macOS           | Pass / Pass (119286873813 / 119286905279)                    |
+| JavaScript Windows         | Pass / Pass (119286873992 / 119286905572)                    |
+| Native macOS Apple Silicon | Pass / Pass (119286874280 / 119286905291)                    |
+| Native Windows x64         | Pass / Pass (119286873801 / 119286905462)                    |
+| Rust dependency review     | Fail / Fail (119286873655 / 119286905435): RUSTSEC-2024-0370 |
+
+These are baseline CI results for the exact requested commit, not results of the later mechanism implementation. The Windows/macOS interactive evidence recorded by the platform sessions is retained; this Linux cloud session did not perform those GUI launches. Passing compilation alone is not substituted for that evidence.
+
+### Implemented but inactive
+
+[Gate operation, exact activation, and rollback](dependencies/rust-advisory-gate.md) describe the implementation. It captures the full unfiltered all-target cargo-deny 0.20.2 advisory report, real scanner exit status, and dependency-state evidence; independently runs blocking license/source/ban checks; adjudicates only the exact candidate; and uploads raw evidence/decision even on failure. Raw logs, an Actions warning and job summary keep the finding visible. No Cargo ignore, target filter, severity downgrade, blanket continue-on-error, or weakening of other build/security jobs was introduced.
+
+`security/rust-advisory-exception.json` is **false**. No approval variable was set by this task. Activation requires a separately reviewed switch change and an administrator-verified approval record in `KREYNIMA_RUSTSEC_2024_0370_APPROVAL`. Until both controls and all scope/date guards pass, the job remains blocked. No risk acceptance or merge permission is inferred from implementation approval.
+
+The hard expiry is executable policy: **2026-11-20T22:00:00.000Z (November 20, 2026, 5 PM America/New_York)**, inclusive. Dependency/workflow state, reported graph, and advisory metadata/solution changes invalidate eligibility. Interim review at **2026-11-04T22:00:00.000Z** is enforced. Malformed reports, scanner failures, unrelated/new findings (including warnings), missing expected findings with an armed exception, invalid/future approval, and stale/expired acceptance fail closed. Every fresh gate execution evaluates runner time; historical green GitHub statuses do not self-revoke, so fresh pre-merge checks remain mandatory.
+
+### Local implementation verification
+
+- `npm run check`: passes with **15 tests** on Node 22.23.3 (2 command/MCP tests and 13 security-gate tests), TypeScript, lint/format, JavaScript builds, and 100-package production license checks. Tests use synthetic approval only; no production switch or variable is enabled.
+- Tests prove unrelated/same-package-new advisories, extra warnings, exact expiry boundary, overdue review, altered state/graph/advisory metadata, malformed/truncated reports, scanner errors, and invalid approval remain blocking. A temporary Git fixture verifies actual lockfile edits and new tracked manifests change the state fingerprint.
+- Live unfiltered local capture: scanner exits **1**, preserves RUSTSEC-2024-0370. Actual disabled CLI gate exits **1**, records `accepted: false`, `exceptionUsed: false`, and reason “Exception disabled or maintainer approval missing.” No synthetic approval was used for this live check.
+- Independent `cargo deny ... check licenses bans sources`: passes with existing duplicate-version/unused-allowance warnings. `cargo fmt --check` passes. `npm audit --audit-level=high`: zero known vulnerabilities reported. actionlint 1.7.7 and diff checks pass.
+- No native application/Rust source, dependency version, lockfile, GPL license, trademark, or brand policy changed in this implementation. New hosted runs are required to verify workflow/artifact integration; their results are separate from baseline `735224e`.
+
+### Remaining approval requirements
+
+The maintainer must review and explicitly approve both the [scoped residual-risk terms](dependencies/RUSTSEC-2024-0370-risk-acceptance-proposal.md) and this concrete implementation/activation plan, verify actual approval author/permalinks and scope digest, and authorize any activation separately. The unfiltered finding must remain recorded as a finding after activation; a companion gate pass means accepted risk, not remediation. Review the recorded native smoke-test evidence and all other required checks/governance gates. Leaving draft, merging, public release, and BUILD 001 each remain separate decisions not authorized by this task. Outstanding legal/distribution/reporting-contact requirements are not waived.
 
 ## Final release-gate preparation: `585e8bc`
 
