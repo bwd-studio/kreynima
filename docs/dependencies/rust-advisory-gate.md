@@ -1,6 +1,6 @@
 # BUILD 000 Rust advisory gate
 
-Status: implementation prepared for review, **disabled**. No maintainer approval has been recorded or activated. This implements the mechanism requested after the [risk proposal](RUSTSEC-2024-0370-risk-acceptance-proposal.md); it does not approve that proposal, merge PR #1, or authorize BUILD 001.
+Status: implementation prepared for review, **disabled**. The maintainer approved the risk terms in chat on 2026-10-21, but explicitly requires separate review and authorization for activation. No exception is activated; the required GitHub approval permalink and activation authorization remain outstanding. This implements the mechanism requested after the [risk proposal](RUSTSEC-2024-0370-risk-acceptance-proposal.md); it does not approve that proposal, merge PR #1, or authorize BUILD 001.
 
 ## What CI does
 

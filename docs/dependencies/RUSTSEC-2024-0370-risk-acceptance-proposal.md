@@ -1,6 +1,6 @@
 # Proposed temporary acceptance: RUSTSEC-2024-0370
 
-**PROPOSAL ONLY — NOT APPROVED.** No risk acceptance, check waiver, Cargo exception, or merge approval has been recorded. The [gate implementation](rust-advisory-gate.md) is prepared but disabled. No `deny.toml`, dependency, or branch-protection exception is active. The unfiltered advisory finding and blocking gate remain visible.
+**RISK TERMS APPROVED — ACTIVATION NOT AUTHORIZED.** On 2026-10-21, the user identifying as the BuildWithDani maintainer explicitly approved the temporary development-only risk terms in this conversation. This is risk acceptance, not remediation, activation approval, a check waiver, or merge approval. The [gate implementation](rust-advisory-gate.md) is prepared but disabled. No `deny.toml`, dependency, or branch-protection exception is active. The unfiltered advisory finding and blocking gate remain visible.
 
 ## Decision requested
 
@@ -9,16 +9,16 @@ The accountable maintainer (proposed owner: @BuildWithDani, the current CODEOWNE
 | Field                               | Proposed value                                                                                                                         |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | Proposal date                       | 2026-10-21, America/New_York                                                                                                           |
-| Status / accepted risks             | Unapproved / none recorded                                                                                                             |
+| Status / accepted risks             | Risk terms approved in maintainer chat; CI exception disabled                                                                          |
 | Advisory                            | **RUSTSEC-2024-0370 only**, currently informational/unmaintained                                                                       |
 | Package                             | `proc-macro-error` **1.0.4** only                                                                                                      |
 | Reference state                     | PR #1, commit `585e8bcb37141d0b7054616c0cacd9d4b022fe60`; documentation-only successors may refer to the same program/dependency state |
 | Cargo.lock SHA-256                  | `1950c2db65396199e43174ac4644dd47d3a1b72ddfb9df3b9f2f45a040e1e7a6`                                                                     |
-| Accountable owner                   | @BuildWithDani, subject to explicit acceptance of ownership                                                                            |
+| Accountable owner                   | @BuildWithDani, as stated in the maintainer chat approval                                                                              |
 | Effective date                      | Only the timestamp of an explicit approval; not backdated                                                                              |
 | Required interim review             | **2026-11-04 at 17:00 America/New_York (22:00 UTC)**, or earlier on a trigger below                                                    |
 | Hard expiration                     | **2026-11-20 at 17:00 America/New_York (22:00 UTC)**; no automatic extension                                                           |
-| Approval evidence                   | **Not recorded**                                                                                                                       |
+| Approval evidence                   | Maintainer chat approval, 2026-10-21; GitHub approval permalink not yet recorded                                                       |
 | Review evidence / next action owner | **Not recorded**; owner must record findings and the next action at each review                                                        |
 
 The hard expiry is fixed 30 calendar dates after the proposal date; later approval shortens the remaining window rather than starting a new rolling period. Approval after the interim-review deadline requires a fresh investigation first. A missed interim review suspends any acceptance until a new explicit review; expiration always ends it. A new dated proposal and approval are required for renewal.
@@ -61,17 +61,19 @@ When a viable update appears, prepare the smallest compatible upgrade; verify re
 
 ## Check-policy implications and any later scoped exception
 
-The maintainer requested a testable mechanism after this proposal was written. It is now [implemented but disabled](rust-advisory-gate.md). The checked-in control is false, no approval variable was set by this task, and no risk has been accepted. Raw all-target findings and scanner exit status are uploaded and printed; licenses/bans/sources retain an independent required step. Other security/build checks remain required. Exact scope/graph/advisory fingerprints and hardcoded expiry are tested, with unrelated findings and stale/invalid evidence remaining blocking.
+The maintainer requested a testable mechanism after this proposal was written. It is now [implemented but disabled](rust-advisory-gate.md). The checked-in control is false, no approval variable was set by this task, and the approved risk terms have not been activated in CI. Raw all-target findings and scanner exit status are uploaded and printed; licenses/bans/sources retain an independent required step. Other security/build checks remain required. Exact scope/graph/advisory fingerprints and hardcoded expiry are tested, with unrelated findings and stale/invalid evidence remaining blocking.
 
 Activation requires both a separately reviewed control-file change and a verified maintainer approval record in an administrator-controlled repository variable. Follow the linked exact activation/rollback procedure; implementation approval is not risk approval. A future accepted gate result must be described as accepted residual risk, never as a clean scan. No branch-protection bypass, merge, or BUILD 001 is authorized.
 
 ## Explicit approval record and merge prerequisites
 
-Before accepting this risk, the maintainer must record: decision (approve/reject), their identity, approval timestamp and permalink, the exact package/advisory/lockfile scope, interim review and hard expiry, ownership, and acknowledgement that recorded interactive smoke-test evidence and other gates remain mandatory. Until then, **accepted risks: none**.
+The user, identifying as the BuildWithDani maintainer, approved these risk terms in chat on 2026-10-21. This record was written at 2026-10-21T16:35:58Z; that is a recording timestamp, not an independently verified approval timestamp. The approval covers only RUSTSEC-2024-0370 / `proc-macro-error` 1.0.4, the documented BUILD 000 dependency state, and Windows/macOS development. It acknowledges the unmaintained dependency and risk acceptance rather than remediation, requires interim review November 4, 2026, and expires November 20, 2026 at 5 PM New York time. All other findings remain blocking.
+
+The maintainer expressly withheld activation authorization and authorization for public releases, merging PR #1, or BUILD 001. No activation control or repository variable was changed. A real maintainer-authored PR review/comment permalink, verified approval metadata, review of the exact implementation/state, and separate explicit activation authorization remain required by the activation procedure. This chat record is not a fabricated GitHub approval record.
 
 Before any merge, separately require:
 
-1. Explicit risk acceptance under these terms or a verified supported fix, and an explicit decision on how any still-failing required advisory check is handled under repository policy. This proposal authorizes no check-policy bypass.
+1. The risk terms are approved in chat; separately verify the required approval evidence and authorize activation, or provide a verified supported fix. Require an explicit decision on how any still-failing required advisory check is handled under repository policy. This proposal authorizes no check-policy bypass.
 2. Review of the recorded Windows 11 Pro x64 interactive development and built-executable smoke tests at `ddd23b0` and the macOS Apple Silicon evidence at `089503e`, including any program changes since those tested commits.
 3. Review of all other required check results and remaining governance/security/legal gates. This proposal waives none of them and grants no release-readiness claim.
 4. An explicit maintainer decision to take PR #1 out of draft and separate authorization to merge. This task grants neither and does not authorize BUILD 001.
