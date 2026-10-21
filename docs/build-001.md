@@ -29,3 +29,7 @@ After installing the [native prerequisites](building.md), check out `feat/build-
 See [BUILD 001 validation](build-001-validation.md) for actual results. BUILD 000 interactive tests do not verify the new drawing UI. Native Windows/macOS GUI tests must be repeated for this slice. This remains development work and is not release-ready.
 
 BUILD 001 changes code and the dependency-state fingerprint. The BUILD 000 RUSTSEC-2024-0370 risk approval does **not** cover it. The scope and false activation control are left unchanged; the full unfiltered scan and independent advisory/license/source checks remain blocking. A regression test explicitly proves changed state cannot inherit the old approval. Resolve the dependency or obtain a separately reviewed disposition for this new scope; do not refresh fingerprints merely to obtain green CI.
+
+## Browser-only development check
+
+For a frontend-only visual session, `npm run dev` serves the UI at localhost:1420. This is not a native application launch. `npm run test:ui` builds the production frontend and runs Playwright against Vite preview; install its browser with `npx playwright install chromium` first (CI also installs system prerequisites). To use an already installed Chromium, set `KREYNIMA_CHROMIUM` to its executable path. Normal `npm run check` runs model/protocol/security tests without requiring a browser; the separate CI drawing job runs browser tests.

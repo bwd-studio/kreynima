@@ -131,4 +131,9 @@ test("scaled canvas coordinates remain in project units and new edits clear redo
   await expect(
     page.getByRole("button", { name: "Redo", exact: true }),
   ).toBeDisabled();
+  await page.reload();
+  await expect(page.locator("[data-stroke-id]")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Undo", exact: true }),
+  ).toBeDisabled();
 });

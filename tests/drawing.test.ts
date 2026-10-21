@@ -270,6 +270,18 @@ test("project and history limits remain bounded and rejected edits leave state i
   const full = dense.read();
   assert.throws(() => apply(dense, add()));
   assert.deepEqual(dense.read(), full);
+  for (let i = 0; i < 20; i++)
+    apply(dense, { type: "project.rename", name: `Dense ${i}` });
+  let denseUndos = 0;
+  while (dense.read().canUndo) {
+    apply(dense, { type: "history.undo" });
+    denseUndos++;
+  }
+  assert.equal(
+    denseUndos,
+    5,
+    "100,000-point history budget prunes dense snapshots",
+  );
 });
 test("tool sessions are isolated and use the same operation results as desktop engine", () => {
   const a = createProjectTools(),
