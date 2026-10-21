@@ -4,6 +4,42 @@
 
 This record was updated on 2026-10-21 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The macOS smoke test used program commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. This evidence update is documentation and ignore-rule housekeeping only; it does not change the tested program or workflow.
 
+## Final release-gate preparation: `585e8bc`
+
+Checked on 2026-10-21 against exact commit `585e8bcb37141d0b7054616c0cacd9d4b022fe60`. The macOS smoke-test evidence added by that commit is preserved below; this Linux cloud session did not reperform that interactive test. Windows interactive development and built-executable tests remain **Not run**.
+
+[Push run 39573790976](https://github.com/bwd-studio/kreynima/actions/runs/39573790976) completed all six jobs:
+
+| Check                      | Actual result at `585e8bc`                                                                                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| JavaScript Linux           | **Pass**, job 119134174983                                                                                                                                          |
+| JavaScript macOS           | **Pass**, job 119134175275                                                                                                                                          |
+| JavaScript Windows         | **Pass**, job 119134175294                                                                                                                                          |
+| Native Windows x64         | **Pass**, [job 119134175251](https://github.com/bwd-studio/kreynima/actions/runs/39573790976/job/119134175251)                                                      |
+| Native macOS Apple Silicon | **Pass**, [job 119134175271](https://github.com/bwd-studio/kreynima/actions/runs/39573790976/job/119134175271)                                                      |
+| Rust dependencies          | **Fail**, [job 119134175434](https://github.com/bwd-studio/kreynima/actions/runs/39573790976/job/119134175434): RUSTSEC-2024-0370; bans, licenses, and sources pass |
+
+The [PR run 39573799015](https://github.com/bwd-studio/kreynima/actions/runs/39573799015) also completed: all JavaScript jobs and both native jobs passed (Windows job 119134203599; macOS job 119134203248). Its Rust job 119134204251 failed on the same advisory. Both runs therefore confirm the five platform checks for the exact requested commit while remaining failed overall on the Rust advisory.
+
+The JavaScript jobs include TypeScript, ESLint, formatting, two command/MCP tests, JavaScript builds, production license checks, and npm audit. Native jobs include Rust formatting/checking, the zero-test Rust harness, and a locked Tauri executable build. Those results do not establish a visible Windows window launch. New documentation-only commits have separate runs whose outcomes must not be inferred from these results.
+
+### Risk disposition: proposed, not accepted
+
+The [existing investigation](dependencies/RUSTSEC-2024-0370.md) was reviewed. The narrowly scoped [risk-acceptance proposal](dependencies/RUSTSEC-2024-0370-risk-acceptance-proposal.md) covers only RUSTSEC-2024-0370 / `proc-macro-error` 1.0.4 in the exact locked Linux/BSD toolkit chain retained in the BUILD 000 Windows/macOS development inventory. It requires explicit owner approval, an interim review by **2026-11-04 at 17:00 America/New_York**, and hard expiry **2026-11-20 at 17:00 America/New_York**; changed dependencies, advisory classification, scope, or remediation availability trigger immediate reassessment/suspension.
+
+**Accepted risks: none recorded.** The user requested proposal preparation, not approval. No Cargo ignore, target filter, check waiver, dependency change, lockfile change, workflow relaxation, or branch-protection change was made. The full raw advisory check remains enabled and failing; risk approval would not turn it into a passed test. If a later scoped gate is requested, the proposal requires separate reviewed code preserving raw all-target findings, exact ID/version/state/date guards, independent license/source/ban gates, and tests that unrelated/expired findings fail. No such gate exists in this update.
+
+### Outstanding requirements and explicit maintainer decisions
+
+Before merge, the maintainer must separately:
+
+1. Approve the exact proposed temporary risk terms and ownership with timestamp/permalink, or require a supported dependency fix. Decide explicitly how any still-failing required advisory check is handled under repository policy; this document authorizes no bypass or silent suppression.
+2. Obtain and review the **Windows interactive** smoke-test evidence for development and built executables, including visible content, startup errors, clean close and relaunch. Review the recorded macOS Apple Silicon evidence at `089503e` and any program changes since it. Compilation alone cannot satisfy this requirement.
+3. Review all other required checks and applicable governance/security gates; acknowledge outstanding legal/distribution requirements before any release. This single-advisory proposal waives none of them.
+4. Explicitly authorize taking PR #1 out of draft and merging after the applicable gates are satisfied. Neither is authorized by this preparation task. BUILD 001 remains out of scope.
+
+`npm run check` passed locally for this documentation update (two tests, builds, type/lint/format, 100-package production license checks). Existing source/license/advisory/build check configuration is unchanged. **BUILD 000 remains incomplete and PR #1 remains draft.**
+
 ## Repository preservation
 
 Base commit: `5092400f47fba3cd727afad7eefd08a651c796c1` (initial commit). The original README.md, LICENSE, and .gitignore were inspected with a clean working tree. Origin remains https://github.com/bwd-studio/kreynima.git . History, GPL license text, and existing ignore rules are preserved. No trademark/brand-policy text, package versions, or dependency lockfiles were changed in this follow-up.
@@ -134,7 +170,7 @@ This result covers only macOS 27.0.1 on Apple Silicon at commit `089503e`. It do
 | Development app launches in a supported environment | **Partially met**. macOS 27.0.1 arm64 interactive development and release launches passed on `089503e`. Hosted native compilation passed on both target runners. Windows interactive launch remains unverified. |
 | Governance documents and architecture               | Present for BUILD 000 scope; legal review/reporting-contact gates remain documented.                                                                                                                            |
 | MCP launches and is tested                          | **Met** for the standalone status foundation, including hosted Windows/macOS/Linux tests.                                                                                                                       |
-| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure.                                                                                                           |
+| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure; the temporary risk proposal is unapproved.                                                                |
 | Applicable checks pass                              | **Partially met**. JavaScript and target compilation pass; the Rust advisory check fails; Linux native checks are blocked.                                                                                      |
 | Blockers documented                                 | **Met** by this record and linked policies.                                                                                                                                                                     |
 
