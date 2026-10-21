@@ -147,3 +147,7 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# KREYNIMA native build output and host metadata
+target/
+.DS_Store

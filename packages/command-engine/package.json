@@ -1,0 +1,11 @@
+{
+  "name": "@kreynima/command-engine",
+  "version": "0.0.0",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@kreynima/project-format": "*"
+  }
+}

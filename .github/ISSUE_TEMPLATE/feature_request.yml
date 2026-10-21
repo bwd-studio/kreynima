@@ -1,0 +1,21 @@
+{
+  "name": "Feature request",
+  "description": "Propose a focused improvement",
+  "body":
+    [
+      {
+        "type": "textarea",
+        "id": "problem",
+        "attributes": { "label": "User problem and workflow" },
+        "validations": { "required": true },
+      },
+      {
+        "type": "textarea",
+        "id": "proposal",
+        "attributes":
+          {
+            "label": "Proposed behavior, alternatives, and editable project implications",
+          },
+      },
+    ],
+}

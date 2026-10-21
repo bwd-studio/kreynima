@@ -1,0 +1,20 @@
+{
+  "name": "Bug report",
+  "description": "Report reproducible behavior",
+  "body":
+    [
+      {
+        "type": "textarea",
+        "id": "reproduction",
+        "attributes":
+          { "label": "Steps, expected behavior, and actual behavior" },
+        "validations": { "required": true },
+      },
+      {
+        "type": "textarea",
+        "id": "environment",
+        "attributes": { "label": "OS, app revision, and redacted logs" },
+        "validations": { "required": true },
+      },
+    ],
+}
