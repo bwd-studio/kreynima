@@ -1,8 +1,8 @@
 # BUILD 000 native smoke test
 
-Run this on a real interactive Windows session and a real interactive macOS session. CI compilation is not evidence of a visible window launch. **Neither manual test has been run by this agent.**
+Run this on a real interactive Windows session and a real interactive macOS session. CI compilation is not evidence of a visible window launch. The macOS Apple Silicon interactive test has been recorded; the Windows interactive test has not been run.
 
-Prerequisites: check out the PR commit being tested, install Node 22.12+ and stable Rust, and follow [platform prerequisites](building.md). Windows needs MSVC/Windows SDK and WebView2; macOS needs Xcode Command Line Tools. Stop other servers using port 1420.
+Prerequisites: check out the PR commit being tested, install Node 22.12+ and stable Rust, and follow [platform prerequisites](building.md). Windows needs MSVC/Windows SDK and WebView2; macOS needs Xcode Command Line Tools. If the selected Xcode license is unaccepted, use the session-only `DEVELOPER_DIR` workaround in [building.md](building.md#macos-command-line-tools-and-xcode-license) rather than changing the system developer directory. Stop other servers using port 1420.
 
 From the repository root, on either OS:
 
@@ -39,9 +39,9 @@ A Windows release build has no console window, so also record any OS crash dialo
 
 Record actual observations in docs/build-000-validation.md, including exact commit, OS version, CPU architecture, Node/Rust versions, dev/built executable tested, observed window, startup errors, clean close/relaunch, and tester/date. Attach redacted terminal output or screenshots if available. Record failures; leave untested rows unverified.
 
-| Platform                              | Development launch | Built executable launch | Startup errors / close / relaunch |
-| ------------------------------------- | ------------------ | ----------------------- | --------------------------------- |
-| Windows (record version/architecture) | Not run            | Not run                 | Unverified                        |
-| macOS (record version/architecture)   | Not run            | Not run                 | Unverified                        |
+| Platform                              | Development launch | Built executable launch | Startup errors / close / relaunch                                                                                            |
+| ------------------------------------- | ------------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Windows (record version/architecture) | Not run            | Not run                 | Unverified                                                                                                                   |
+| macOS 27.0.1 arm64, commit `089503e`  | Pass               | Pass                    | Pass: no observed crashes or Rust panics; resize, minimize, restore; both executables closed and relaunched with exit code 0 |
 
-A pass covers only that OS/architecture and commit. It does not verify animation features, general compatibility, signing, complete security, or release readiness.
+The recorded macOS Apple Silicon observations, commands, and environment are in [docs/build-000-validation.md](build-000-validation.md#macos-interactive-smoke-test). A pass covers only that OS/architecture and commit. It does not verify animation features, general compatibility, signing, complete security, or release readiness.

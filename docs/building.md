@@ -21,9 +21,23 @@ Cargo.lock is committed. Use `--locked` for Rust dependency resolution and revie
 
 Rust license review: install cargo-deny locally or use CI's isolated dependency job, then run `cargo deny --manifest-path apps/desktop/src-tauri/Cargo.toml check advisories licenses bans sources`. Policy is conservative; review exceptions rather than expanding it blindly. FFmpeg and Blender are not bundled. No paid service is needed.
 
+`tauri dev` and `tauri build` regenerate ACL/capability JSON under `apps/desktop/src-tauri/gen/`. Those files are ignored; do not commit them.
+
+## macOS Command Line Tools and Xcode license
+
+macOS compilation needs a working Apple C toolchain. If `xcode-select -p` points at `/Applications/Xcode.app/Contents/Developer` and the Xcode license has not been accepted, `clang` and `xcrun` exit 69 and print `Please run 'sudo xcodebuild -license'`. Accepting that license or changing the active developer directory requires administrator approval and must not be applied automatically.
+
+When Xcode Command Line Tools are already installed at `/Library/Developer/CommandLineTools`, a session-only workaround is:
+
+```sh
+export DEVELOPER_DIR=/Library/Developer/CommandLineTools
+```
+
+Confirm `xcrun --sdk macosx --show-sdk-path` succeeds in that environment, then run the npm and cargo commands from the same shell. This does not accept the Xcode license and does not run `xcode-select -s`. The 2026-10-21 macOS Apple Silicon smoke test used this workaround; see [the validation record](build-000-validation.md#macos-interactive-smoke-test).
+
 ## Manual native window smoke test
 
-For the short launch/window/close procedure and an unverified-results table, use [native-smoke-test.md](native-smoke-test.md).
+For the short launch/window/close procedure and the results table, use [native-smoke-test.md](native-smoke-test.md).
 
 A successful compile in a hosted runner does not confirm a visible, usable native window. BUILD 000 CI is configured to compile the application but does not exercise an interactive Windows/macOS desktop session. Perform this procedure on each target OS with an interactive logged-in user; record the exact commit, OS version, CPU architecture, Rust/Node versions, commands, exit status, and observed result in the validation record.
 

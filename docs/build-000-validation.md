@@ -1,8 +1,8 @@
 # BUILD 000 validation and open gates
 
-**BUILD 000 is not yet complete.** Native compilation and JavaScript/MCP checks have passed on hosted target runners, but interactive native window launches remain unverified and the full Rust dependency review fails on an upstream maintenance advisory. No merge or BUILD 001 work was performed.
+**BUILD 000 is not yet complete.** Native compilation and JavaScript/MCP checks have passed on hosted target runners, and an interactive macOS Apple Silicon window launch has been recorded. The interactive Windows native window launch remains unverified, and the full Rust dependency review fails on an upstream maintenance advisory. No merge or BUILD 001 work was performed.
 
-This record was updated on 2026-10-20 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The final evidence update is documentation only; it does not change the tested program or workflow.
+This record was updated on 2026-10-21 (America/New_York); GitHub logs use UTC. The tested branch is `feat/build-000-foundation`, draft PR [#1](https://github.com/bwd-studio/kreynima/pull/1). Application/MCP implementation is at `3b1c9176df8206b0dcc83753f47d4f16d67d1c49`; commit `065ae5a` changed documentation, and `4543eb15b32b8e290eddc03c15a407ed07a2492e` added LF checkout rules plus documentation. The macOS smoke test used program commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. This evidence update is documentation and ignore-rule housekeeping only; it does not change the tested program or workflow.
 
 ## Repository preservation
 
@@ -86,25 +86,62 @@ Both push and PR runs completed and confirm all five platform jobs passed on `16
 
 Rechecked locally for this documentation follow-up: `npm run check` passed, inverse target trees and registry/update checks completed, and `cargo deny ... check advisories licenses bans sources` failed only on the advisory while the remaining categories passed. No Rust/application code changed, so target native jobs above are the relevant compiled-source evidence; Linux native compilation remains blocked by missing system prerequisites as previously recorded.
 
-A [short native smoke-test checklist](native-smoke-test.md) now supplies Windows PowerShell and macOS Terminal commands: launch, verify the development window, inspect startup errors, close, and reopen; repeat against the built executable without Vite. Both manual OS results remain explicitly **Not run**. No GUI launch was observed by this agent.
+A [short native smoke-test checklist](native-smoke-test.md) supplies Windows PowerShell and macOS Terminal commands: launch, verify the development window, inspect startup errors, close, and reopen; repeat against the built executable without Vite. The macOS Apple Silicon interactive result is recorded below. The Windows interactive result remains **Not run**.
 
-The draft is ready for maintainer review of the foundation and documented dependency disposition. BUILD 000 acceptance remains incomplete and the PR must stay draft: resolve/review the advisory explicitly and obtain the recorded Windows/macOS native launch evidence. No merge or BUILD 001 work was performed.
+The draft is ready for maintainer review of the foundation and documented dependency disposition. BUILD 000 acceptance remains incomplete and the PR must stay draft: resolve/review the advisory explicitly and obtain the remaining recorded Windows native launch evidence. No merge or BUILD 001 work was performed.
+
+## macOS interactive smoke test
+
+Recorded on 2026-10-21 (America/New_York) against `feat/build-000-foundation` commit `089503e6e0776dafaf23d07c4ed18aac3c66997a`. This is an interactive desktop session on one Mac, not a hosted runner compile.
+
+| Item              | Observed value                                                                                                                                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OS / architecture | macOS 27.0.1 (build 26A434), arm64 (`aarch64-apple-darwin`)                                                                                                                                             |
+| Node / npm        | v22.13.1 / 10.9.2                                                                                                                                                                                       |
+| Rust              | rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1; stable rustup toolchain installed for this session because Rust was previously missing                                                               |
+| Apple toolchain   | Xcode 27.1 selected at `/Applications/Xcode.app/Contents/Developer`; Xcode license unaccepted (`clang`/`xcrun` exit 69). Xcode Command Line Tools 27.0.0 and Apple clang 21.0.0 were already installed. |
+| Workaround        | Session-only `export DEVELOPER_DIR=/Library/Developer/CommandLineTools`. The system `xcode-select` setting was not changed and `sudo xcodebuild -license` was not run.                                  |
+| Tester            | Cursor agent on the maintainer Mac                                                                                                                                                                      |
+
+Commands, from the repository root, with `DEVELOPER_DIR=/Library/Developer/CommandLineTools` and `$HOME/.cargo/env` sourced:
+
+```sh
+npm ci
+npm run check
+npm run desktop
+npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked
+./apps/desktop/src-tauri/target/release/kreynima-desktop
+```
+
+Port 1420 was free before each launch. `npm ci` completed with 0 known JavaScript vulnerabilities. `npm run check` passed: TypeScript, ESLint, Prettier, two JavaScript/MCP tests, the MCP and desktop JavaScript builds, and the production license allowlist.
+
+| Check                                  | Result                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Development launch (`npm run desktop`) | **Pass**. Cargo finished the `dev` profile in 49.28s and ran `target/debug/kreynima-desktop`. A native macOS window owned by `kreynima-desktop` opened; the window was not a browser tab. Title: **KREYNIMA — Development**. Visible content: **KREYNIMA**, **BUILD 000**, **Development foundation**, and “No project is open.” Startup logs had no compile error or Rust panic. |
+| Resize / minimize / restore            | **Pass**. Window resized from 1100×760 to 780×560 with readable text. Minimize removed the on-screen window; restore brought it back. Restored size 1100×745 still showed the same content.                                                                                                                                                                                       |
+| Development close / relaunch           | **Pass**. The close button ended `kreynima-desktop` and the watcher with exit code 0. A second `npm run desktop` opened the same titled window and content. Closing again exited 0. No crash report was written.                                                                                                                                                                  |
+| Release build                          | **Pass**. `npm run tauri -w @kreynima/desktop -- build --ci --no-bundle -- --locked` exited 0 in 62.5s and wrote `apps/desktop/src-tauri/target/release/kreynima-desktop` (Mach-O arm64, about 9.5 MB, ad hoc linker-signed). This is an unsigned local executable, not an installer or notarized release.                                                                        |
+| Release launch / close / relaunch      | **Pass**. `./apps/desktop/src-tauri/target/release/kreynima-desktop` opened the same titled native window and BUILD 000 content without listening on port 1420. First and second launches both exited 0 after a normal close. Terminal output was empty; no panic or OS crash dialog appeared.                                                                                    |
+
+Tauri also wrote generated ACL/capability JSON under `apps/desktop/src-tauri/gen/schemas/`. Those files are host build artifacts, not application source, and are now ignored.
+
+This result covers only macOS 27.0.1 on Apple Silicon at commit `089503e`. It does not verify macOS Intel, other macOS versions, Windows, accessibility, signing, complete security, or release readiness. The configured window title remains **KREYNIMA — Development** for the release binary.
 
 ## Acceptance gates
 
-| BUILD 000 criterion                                 | Assessment                                                                                                                 |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Development app launches in a supported environment | **Unverified**. Hosted native compilation passed; no interactive Windows/macOS launch has been observed.                   |
-| Governance documents and architecture               | Present for BUILD 000 scope; legal review/reporting-contact gates remain documented.                                       |
-| MCP launches and is tested                          | **Met** for the standalone status foundation, including hosted Windows/macOS/Linux tests.                                  |
-| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure.                      |
-| Applicable checks pass                              | **Partially met**. JavaScript and target compilation pass; the Rust advisory check fails; Linux native checks are blocked. |
-| Blockers documented                                 | **Met** by this record and linked policies.                                                                                |
+| BUILD 000 criterion                                 | Assessment                                                                                                                                                                                                      |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Development app launches in a supported environment | **Partially met**. macOS 27.0.1 arm64 interactive development and release launches passed on `089503e`. Hosted native compilation passed on both target runners. Windows interactive launch remains unverified. |
+| Governance documents and architecture               | Present for BUILD 000 scope; legal review/reporting-contact gates remain documented.                                                                                                                            |
+| MCP launches and is tested                          | **Met** for the standalone status foundation, including hosted Windows/macOS/Linux tests.                                                                                                                       |
+| CI and local scripts                                | **Met**. Push/PR triggering and target jobs are confirmed. The full workflow has an advisory failure.                                                                                                           |
+| Applicable checks pass                              | **Partially met**. JavaScript and target compilation pass; the Rust advisory check fails; Linux native checks are blocked.                                                                                      |
+| Blockers documented                                 | **Met** by this record and linked policies.                                                                                                                                                                     |
 
 Before calling BUILD 000 complete:
 
 1. Resolve the Rust maintenance advisory upstream or establish an explicitly reviewed disposition without silently hiding it.
-2. Perform and record the [minimal native smoke test](building.md#manual-native-window-smoke-test) on interactive Windows and macOS systems: development and built executable launch, readable content, resize/minimize/restore, clean close and relaunch. CI did not exercise visible desktop sessions. Record commit, OS, architecture, tool versions, and result; do not infer untested architectures.
+2. Perform and record the [minimal native smoke test](building.md#manual-native-window-smoke-test) on the remaining interactive Windows system: development and built executable launch, readable content, resize/minimize/restore, clean close and relaunch. The macOS Apple Silicon session is recorded above. CI did not exercise visible desktop sessions. Record commit, OS, architecture, tool versions, and result; do not infer untested architectures.
 3. Establish verified confidential security/conduct contacts and review repository enforcement settings. Obtain legal review of trademark/brand policies, GPL-only interpretation, contribution terms, and distribution obligations before release.
 4. Before distributing releases, separately plan reviewed identifiers/icons, installers, signing/notarization, and complete third-party notices/corresponding source. Those release tasks are not claimed complete by BUILD 000.
 

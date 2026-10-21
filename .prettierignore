@@ -4,3 +4,4 @@ target/
 dist/
 node_modules/
 LICENSE
+apps/desktop/src-tauri/gen/
